@@ -1,0 +1,5 @@
+[submodule "q2_ili/assets/ili"]
+	path = q2_ili/assets/ili
+	url = git://github.com/ElDeveloper/ili.git
+	branch = q2-ili
+	shallow = true
