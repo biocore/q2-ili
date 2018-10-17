@@ -7,9 +7,10 @@
 # ----------------------------------------------------------------------------
 
 from ._plot import plot
+from ._semantics import Model, STLDirFmt, STLFile
 from ._version import get_versions
 
 __version__ = get_versions()['version']
 del get_versions
 
-__all__ = ['plot']
+__all__ = ['plot', 'Model', 'STLDirFmt', 'STLFile']
