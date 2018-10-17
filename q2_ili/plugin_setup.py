@@ -8,18 +8,10 @@
 
 
 import q2_ili
-from ._plot import plot, procrustes_plot, biplot
+from ._plot import plot
+from ._semantics import STLDirFmt, Model
+from qiime2.plugin import Plugin, Metadata, Citations
 
-from qiime2.plugin import (Plugin, Metadata, Str, Citations, List, Range, Int,
-                           Properties)
-from q2_types.ordination import PCoAResults
-
-PARAMETERS = {'metadata': Metadata, 'custom_axes': List[Str]}
-PARAMETERS_DESC = {
-    'metadata': 'The sample metadata.',
-    'custom_axes': ('Numeric sample metadata columns that should be '
-                    'included as axes in the ili plot.')
-}
 
 plugin = Plugin(
     name='ili',
@@ -27,20 +19,25 @@ plugin = Plugin(
     website='https://ili.embl.de/',
     citations=Citations.load('citations.bib', package='q2_ili'),
     package='q2_ili',
-    description=('This QIIME 2 plugin wraps ili and '
+    description=('This QIIME 2 plugin wraps `ili and '
                  'supports interactive visualization of 3D models'),
-    short_description='Plugin spatial mapping with ili.'
+    short_description='Plugin for spatial mapping with `ili'
 )
+
+# type registration
+plugin.register_views(STLDirFmt)
+plugin.register_semantic_types(Model)
+plugin.register_semantic_type_to_format(Model, artifact_format=STLDirFmt)
+
 
 plugin.visualizers.register_function(
     function=plot,
-    inputs={'model': PCoAResults},
+    inputs={'model': Model},
     parameters={'metadata': Metadata},
     input_descriptions={
-        'pcoa': 'The principal coordinates matrix to be plotted.'
+        'model': 'The model where the data will be plotted.'
     },
-    parameter_descriptions=PARAMETERS_DESC,
-    name='Visualize and Interact with Principal Coordinates Analysis Plots',
-    description='Generates an interactive ordination plot where the user '
-                'can visually integrate sample metadata.'
+    parameter_descriptions={'metadata': 'Metadata used to color the model'},
+    name='Visualize and interact with 3D models',
+    description='Visualize and interact with 3D models colored using metadata'
 )

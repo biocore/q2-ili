@@ -10,44 +10,28 @@ import os
 import pkg_resources
 
 import qiime2
-import skbio
-import q2templates
 
-TEMPLATES = pkg_resources.resource_filename('q2_ili', 'assets')
+from ._semantics import STLDirFmt
+
+from distutils.dir_util import copy_tree
+from shutil import copyfile
 
 
-def _generic_plot(output_dir: str, master: skbio.OrdinationResults,
-                  metadata: qiime2.Metadata,
-                  other_pcoa: skbio.OrdinationResults, plot_name,
-                  custom_axes: str=None,
-                  feature_metadata: qiime2.Metadata=None):
+ASSETS = pkg_resources.resource_filename('q2_ili', 'assets')
 
+
+def plot(output_dir: str, model: STLDirFmt,
+         metadata: qiime2.Metadata) -> None:
     mf = metadata.to_dataframe()
 
-    if other_pcoa is None:
-        procrustes = None
-    else:
-        procrustes = [other_pcoa]
+    ili_path = os.path.join(ASSETS, 'ili')
 
-    viz = ili(master, mf, feature_mapping_file=feature_metadata,
-                  procrustes=procrustes, remote='.')
+    # copy the ili contents into the output folder
+    copy_tree(ili_path, output_dir)
 
-    if custom_axes is not None:
-        viz.custom_axes = custom_axes
+    stl = os.path.join(str(model.path), 'model.stl')
 
-    if other_pcoa:
-        viz.procrustes_names = ['reference', 'other']
-
-    html = viz.make_ili(standalone=True)
-    viz.copy_support_files(output_dir)
-    with open(os.path.join(output_dir, 'ili.html'), 'w') as fh:
-        fh.write(html)
-
-    index = os.path.join(TEMPLATES, 'index.html')
-    q2templates.render(index, output_dir, context={'plot_name': plot_name})
-
-
-def plot(output_dir: str, pcoa: skbio.OrdinationResults,
-         metadata: qiime2.Metadata, custom_axes: str=None) -> None:
-    _generic_plot(output_dir, master=pcoa, metadata=metadata, other_pcoa=None,
-                  custom_axes=custom_axes, plot_name='plot')
+    # we save the data to the workers folder since that's where the files are
+    # loaded from, and to avoid requests to external sites, etc.
+    mf.to_csv(os.path.join(output_dir, 'js/workers', 'features.csv'))
+    copyfile(stl, os.path.join(output_dir, 'js/workers', 'model.stl'))
