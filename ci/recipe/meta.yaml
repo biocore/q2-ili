@@ -23,7 +23,6 @@ requirements:
     - numpy
     - pandas
     - qiime2 {{ release }}.*
-    - q2templates {{ release }}.*
     - q2-types {{ release }}.*
 
 test:
@@ -32,6 +31,6 @@ test:
     - qiime2.plugins.ili
 
 about:
-  home: https://qiime2.org
+  home: https://www.github.com/biocore/q2-ili
   license: BSD-3-Clause
   license_family: BSD
