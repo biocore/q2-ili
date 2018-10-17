@@ -20,17 +20,19 @@ from q2_ili import plot, STLDirFmt
 class PlotTests(unittest.TestCase):
     def setUp(self):
         # avoid including an STL model in the repo since we only really need
-        # to test that the copying works, this can just be a file
-        self.stl = tempfile.NamedTemporaryFile()
+        # to test that the copying works of the directory's contents work
+        self.data = tempfile.TemporaryDirectory()
+        with open(os.path.join(self.data.name, 'model.stl'), 'w') as f:
+            f.write('Not the STL file you are looking for')
 
-        self.model = STLDirFmt(path=self.stl.name, mode='r')
+        self.model = STLDirFmt(path=self.data.name, mode='r')
         self.metadata = q2.Metadata(
             pd.DataFrame({'val1': ['1.0', '2.0', '3.0', '4.0'],
                           'val2': ['3.3', '3.5', '3.6', '3.9']},
                          index=pd.Index(['A', 'B', 'C', 'D'], name='id')))
 
     def tearDown(self):
-        self.deletable.close()
+        self.data.cleanup()
 
     def test_plot(self):
         with tempfile.TemporaryDirectory() as output_dir:
