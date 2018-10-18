@@ -17,6 +17,16 @@ pip install .
 qiime dev refresh-cache
 ```
 
+## Troubleshooting installation
+
+If the `git` command above results in an error like the following:
+
+```bash
+error: Server does not allow request for unadvertised object...
+```
+
+you may need to update the version of `git` that is installed on your system. You can download the latest version of git [here](https://git-scm.com/downloads). 
+
 # Requirements
 
 In order to use this plugin, you need a 3D model in STL format and a mapping
