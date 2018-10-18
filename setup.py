@@ -23,17 +23,20 @@ setup(
         'qiime2.plugins':
         ['q2-ili=q2_ili.plugin_setup:plugin']
     },
-    package_data={'q2_ili': ['assets/index.html', 'citations.bib'
-                             'assets/ili/*.js', 'assets/ili/*.html',
-                             'assets/ili/*.css', 'assets/ili/*.json',
-                             'assets/ili/img/*.png', 'assets/ili/js/*.js',
-                             'assets/ili/workers/*.js', 'assets/ili/lib/*.js',
-                             'assets/ili/emperor/*.js',
-                             'assets/ili/img/bootstrap-colorpicker/*.png',
-                             'assets/ili/css/*.css', 'assets/ili/fonts/*.ttf',
-                             'assets/ili/fonts/*.woff',
-                             'assets/ili/fonts/*.woff2',
-                             'assets/ili/images/*.png',
-                             ]},
+    package_data={'q2_ili': [
+        'assets/ili/*.js', 'assets/ili/*.html',
+        'assets/ili/*.css', 'assets/ili/*.json',
+        'assets/ili/img/*.png', 'assets/ili/js/*.js',
+        'assets/ili/js/workers/*.js',
+        'assets/ili/js/lib/*.js',
+        'assets/ili/js/emperor/*.js',
+        'assets/ili/js/lib/img/bootstrap-colorpicker/*.png',
+        'assets/ili/js/lib/css/*.css',
+        'assets/ili/js/lib/fonts/*.ttf',
+        'assets/ili/js/lib/fonts/*.woff',
+        'assets/ili/js/lib/fonts/*.woff2',
+        'assets/ili/js/lib/images/*.png',
+        'citations.bib'
+    ]},
     zip_safe=False,
 )
